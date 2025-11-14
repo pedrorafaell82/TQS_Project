@@ -1,2 +1,2 @@
-# TQS_Project
+# Sound Shop
 TQS Project
