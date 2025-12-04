@@ -1,19 +1,48 @@
-.instrument-list {
+.favorites-list {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.filters {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
+.favorites-list h2 {
+    margin-bottom: 1rem;
 }
 
-.filters input, .filters select {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.empty-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.empty-state p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #1976d2;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background: #1565c0;
 }
 
 .grid {
@@ -42,21 +71,16 @@
     flex: 1;
 }
 
-.btn-favorite {
+.btn-remove {
     background: none;
     border: none;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     cursor: pointer;
     padding: 0.25rem 0.5rem;
-    transition: transform 0.2s;
 }
 
-.btn-favorite:hover {
+.btn-remove:hover {
     transform: scale(1.2);
-}
-
-.btn-favorite.active {
-    color: #ffc107;
 }
 
 .loading, .error {

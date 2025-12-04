@@ -1,15 +1,11 @@
 /**
  * InstrumentList Component
  * User Story: SOUN-19 - Browse music equipment
- * 
- * Features:
- * - List all instruments
- * - Search by keyword
- * - Filter by price
- * - Filter by category
+ * User Story: SOUN-21 - Mark equipment as favorite
  */
 import React, { useState, useEffect } from 'react';
 import { getInstruments } from '../../services/api';
+import { addToFavorites, removeFromFavorites, isFavorite } from '../../services/favoritesService';
 import './InstrumentList.css';
 
 function InstrumentList() {
@@ -17,6 +13,7 @@ function InstrumentList() {
     const [filtered, setFiltered] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [favorites, setFavorites] = useState([]);
     
     const [searchKeyword, setSearchKeyword] = useState('');
     const [maxPrice, setMaxPrice] = useState('');
@@ -48,7 +45,6 @@ function InstrumentList() {
     const applyFilters = () => {
         let result = [...instruments];
 
-        // Keyword
         if (searchKeyword) {
             result = result.filter(i => 
                 i.name.toLowerCase().includes(searchKeyword.toLowerCase()) ||
@@ -56,17 +52,29 @@ function InstrumentList() {
             );
         }
 
-        // Price
         if (maxPrice) {
             result = result.filter(i => Number(i.dailyPrice) <= Number(maxPrice));
         }
 
-        // Category
         if (category !== 'ALL') {
             result = result.filter(i => i.category === category);
         }
 
         setFiltered(result);
+    };
+
+    /**
+     * Toggle favorite status for instrument
+     * Prevents duplicates automatically
+     */
+    const toggleFavorite = (instrumentId) => {
+        if (isFavorite(instrumentId)) {
+            removeFromFavorites(instrumentId);
+        } else {
+            addToFavorites(instrumentId);
+        }
+        // Force re-render
+        setFavorites([...favorites, Math.random()]);
     };
 
     if (loading) return <div className="loading">Loading...</div>;
@@ -103,7 +111,16 @@ function InstrumentList() {
             <div className="grid">
                 {filtered.map(inst => (
                     <div key={inst.id} className="card">
-                        <h3>{inst.name}</h3>
+                        <div className="card-header">
+                            <h3>{inst.name}</h3>
+                            <button 
+                                className={`btn-favorite ${isFavorite(inst.id) ? 'active' : ''}`}
+                                onClick={() => toggleFavorite(inst.id)}
+                                title={isFavorite(inst.id) ? 'Remove from favorites' : 'Add to favorites'}
+                            >
+                                {isFavorite(inst.id) ? '⭐' : '☆'}
+                            </button>
+                        </div>
                         <p>{inst.description}</p>
                         <p><strong>€{inst.dailyPrice}/day</strong></p>
                         <p>Category: {inst.category}</p>
