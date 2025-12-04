@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    // later: method to check overlaps
-    List<Booking> findByEquipmentAndEndDateGreaterThanEqualAndStartDateLessThanEqual(
+    List<Booking> findByGearAndEndDateGreaterThanEqualAndStartDateLessThanEqual(
             Gear gear, LocalDate start, LocalDate end);
+
+    List<Booking> findByRenter_Id(Long renterId);
 }

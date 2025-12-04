@@ -18,7 +18,14 @@ public class Gear {
 
     private String category;
 
+    private String brand;
+
+    private String conditionGrade;
+
     private BigDecimal dailyPrice;
+
+    @ManyToOne(optional = false)
+    private User owner;
 
     private Instant createdAt = Instant.now();
 
@@ -70,5 +77,28 @@ public class Gear {
         this.createdAt = createdAt;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getConditionGrade() {
+        return conditionGrade;
+    }
+
+    public void setConditionGrade(String conditionGrade) {
+        this.conditionGrade = conditionGrade;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
     
 }

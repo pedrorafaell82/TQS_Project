@@ -18,6 +18,8 @@ public class User {
 
     private String name;
 
+    private String role;
+
     private Instant createdAt = Instant.now();
 
     public Long getId() {
@@ -60,5 +62,12 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
     
 }
