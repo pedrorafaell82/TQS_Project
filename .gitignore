@@ -1,0 +1,41 @@
+############################
+#  Java / Spring Boot
+############################
+/target/
+**/target/
+*.class
+*.log
+*.out
+*.tmp
+
+############################
+#  Node / React / Vite
+############################
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.vite/
+**/.vite/
+
+# ficheiros de ambiente (não pôr chaves/API no git)
+.env
+*.env.local
+*.env.development
+*.env.production
+
+############################
+#  IDEs e ferramentas
+############################
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+############################
+#  SO / lixo geral
+############################
+.DS_Store
+Thumbs.db
