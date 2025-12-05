@@ -15,7 +15,7 @@ function App() {
                         <Link to="/bookings">My Bookings</Link>
                     </div>
                 </nav>
-                
+
                 <main className="main-content">
                     <Routes>
                         <Route path="/" element={<InstrumentList />} />
@@ -24,7 +24,7 @@ function App() {
                         <Route path="/bookings" element={<div><h2>My Bookings (TODO)</h2></div>} />
                     </Routes>
                 </main>
-                
+
                 <footer className="footer">
                     <p>SoundShop © 2024 - TQS Project</p>
                 </footer>
