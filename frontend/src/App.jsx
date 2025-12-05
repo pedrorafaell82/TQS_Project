@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import InstrumentList from './components/Catalog/InstrumentList';
 import MyBookings from './components/Booking/MyBookings';
+import BookingHistory from './components/Booking/BookingHistory';
 import './App.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
                         <Link to="/instruments">Browse</Link>
                         <Link to="/favorites">Favorites</Link>
                         <Link to="/bookings">My Bookings</Link>
+                        <Link to="/history">History</Link>
                     </div>
                 </nav>
 
@@ -23,6 +25,7 @@ function App() {
                         <Route path="/instruments" element={<InstrumentList />} />
                         <Route path="/favorites" element={<div><h2>Favorites (TODO)</h2></div>} />
                         <Route path="/bookings" element={<MyBookings />} />
+                        <Route path="/history" element={<BookingHistory />} />
                     </Routes>
                 </main>
 
