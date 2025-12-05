@@ -76,3 +76,39 @@ export const addToFavorites = (instrumentId) => api.post('/favorites', { instrum
 export const removeFromFavorites = (instrumentId) => api.delete(`/favorites/${instrumentId}`);
 
 export default api;
+
+
+// ===== BOOKINGS =====
+
+/**
+ * Create booking for instrument
+ * @param {number} instrumentId - Instrument ID
+ * @param {Object} data - {renterId, startDate, endDate}
+ * @returns {Promise<BookingDto>}
+ */
+export const createBooking = (instrumentId, data) => 
+    api.post(`/instruments/${instrumentId}/bookings`, data);
+
+/**
+ * Get booking by ID
+ * @param {number} id - Booking ID
+ * @returns {Promise<BookingDto>}
+ */
+export const getBookingById = (id) => api.get(`/bookings/${id}`);
+
+/**
+ * Get all bookings for renter
+ * @param {number} renterId - Renter ID
+ * @returns {Promise<BookingDto[]>}
+ */
+export const getBookingsForRenter = (renterId) => 
+    api.get(`/users/${renterId}/bookings`);
+
+/**
+ * Update booking status
+ * @param {number} id - Booking ID
+ * @param {string} status - New status
+ * @returns {Promise<BookingDto>}
+ */
+export const updateBookingStatus = (id, status) => 
+    api.patch(`/bookings/${id}/status`, { status });

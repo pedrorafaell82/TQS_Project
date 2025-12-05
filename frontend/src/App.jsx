@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import InstrumentList from './components/Catalog/InstrumentList';
+import MyBookings from './components/Booking/MyBookings';
 import './App.css';
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
                         <Route path="/" element={<InstrumentList />} />
                         <Route path="/instruments" element={<InstrumentList />} />
                         <Route path="/favorites" element={<div><h2>Favorites (TODO)</h2></div>} />
-                        <Route path="/bookings" element={<div><h2>My Bookings (TODO)</h2></div>} />
+                        <Route path="/bookings" element={<MyBookings />} />
                     </Routes>
                 </main>
 
