@@ -1,9 +1,10 @@
 package tqs.soundshop.entities;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import tqs.soundshop.entities.Gear;
+import java.util.List;
 
 public interface GearRepository extends JpaRepository<Gear, Long> {
-    // later: custom queries (filter by category, price, etc.)
+
+    List<Gear> findByOwner_Email(String email);
+
 }

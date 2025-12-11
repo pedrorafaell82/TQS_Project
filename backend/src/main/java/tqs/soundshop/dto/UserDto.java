@@ -1,9 +1,11 @@
 package tqs.soundshop.dto;
 
+import tqs.soundshop.entities.User;
+import java.util.Set;
+
 public record UserDto(
         Long id,
         String email,
         String name,
-        String role   
+        Set<User.Role> roles
 ) {}
-
