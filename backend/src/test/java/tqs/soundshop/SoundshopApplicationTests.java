@@ -1,13 +1,14 @@
 package tqs.soundshop;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import static org.assertj.core.api.Assertions.assertThat;
+
 class SoundshopApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+        assertThat(SoundshopApplication.class.getSimpleName())
+            .isEqualTo("SoundshopApplication");
+    }
 }

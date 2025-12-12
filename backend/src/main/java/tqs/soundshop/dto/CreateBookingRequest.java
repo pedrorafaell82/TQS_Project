@@ -1,9 +1,9 @@
 package tqs.soundshop.dto;
 
 import java.time.LocalDate;
+import jakarta.validation.constraints.NotNull;
 
 public record CreateBookingRequest(
-        Long renterId,
-        LocalDate startDate,
-        LocalDate endDate
+        @NotNull LocalDate startDate,
+        @NotNull LocalDate endDate
 ) {}

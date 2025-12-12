@@ -27,6 +27,9 @@ public class Gear {
     @ManyToOne(optional = false)
     private User owner;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     private Instant createdAt = Instant.now();
 
     public Long getId() {
@@ -99,6 +102,14 @@ public class Gear {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
     
 }

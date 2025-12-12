@@ -9,5 +9,6 @@ public record InstrumentDto(
         String category,
         String brand,
         String conditionGrade,
-        BigDecimal dailyPrice
+        BigDecimal dailyPrice,
+        boolean active
 ) {}
