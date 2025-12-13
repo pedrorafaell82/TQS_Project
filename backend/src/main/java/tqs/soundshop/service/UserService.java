@@ -1,6 +1,8 @@
 package tqs.soundshop.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import tqs.soundshop.dto.RegisterUserRequest;
 import tqs.soundshop.dto.UserDto;
@@ -57,6 +59,16 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User with email " + email + " not found"));
         return toDto(user);
+    }
+    
+    public UserDetails loadUserByName(String username) {
+        User user = userRepository.findByName(username);
+
+        return org.springframework.security.core.userdetails.User
+        .withUsername(user.getName())
+        .password(user.getPasswordHash())
+        .authorities(user.getRole())
+        .build();
     }
 
     private UserDto toDto(User user) {
