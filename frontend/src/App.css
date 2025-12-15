@@ -30,16 +30,37 @@ body {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.switch-owner{
+  color: #fff;           /* white text */
+  margin-left: 16px;     /* sits to the right of the logo */
+  text-decoration: none;
+}
+
+.nav-links{
+  margin-left: auto;
+  display: flex;
+  gap: 2rem;
+}
+
+.switch-owner-btn{
+  margin-left: 16px;
+  color: #fff;
+  text-decoration: none;
+
+  padding: 8px 12px;
+  border: 1px solid #fff;
+  border-radius: 8px;
+}
+
+.switch-owner-btn:hover{
+  opacity: 0.9;
+}
+
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
   color: white;
   text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2rem;
 }
 
 .nav-links a {
