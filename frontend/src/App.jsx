@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import InstrumentList from './components/Catalog/InstrumentList';
 import MyBookings from './components/Booking/MyBookings';
 import BookingHistory from './components/Booking/BookingHistory';
 import PendingRequests from './components/Booking/PendingRequests';
 import { getBookingsForRenter } from './services/api';
 import './App.css';
+import LoginPage from './components/Auth/Login';
+import RegisterPage from './components/Auth/Register';
+import Navbar from './components/Navbar';
+import Layout from './components/Layout';
 
 function App() {
     const [pendingCount, setPendingCount] = useState(0);
@@ -31,36 +35,20 @@ function App() {
 
     return (
         <BrowserRouter>
-            <div className="app">
-                <nav className="navbar">
-                    <Link to="/" className="logo">🎸 SoundShop</Link>
-                    <div className="nav-links">
-                        <Link to="/instruments">Browse</Link>
-                        <Link to="/pending" className="nav-link-with-badge">
-                            Pending
-                            {pendingCount > 0 && (
-                                <span className="nav-badge">{pendingCount}</span>
-                            )}
-                        </Link>
-                        <Link to="/bookings">My Bookings</Link>
-                        <Link to="/history">History</Link>
-                    </div>
-                </nav>
+            <Routes>
+                {/* Routes WITHOUT navbar */}
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
 
-                <main className="main-content">
-                    <Routes>
-                        <Route path="/" element={<InstrumentList />} />
-                        <Route path="/instruments" element={<InstrumentList />} />
-                        <Route path="/pending" element={<PendingRequests />} />
-                        <Route path="/bookings" element={<MyBookings />} />
-                        <Route path="/history" element={<BookingHistory />} />
-                    </Routes>
-                </main>
-
-                <footer className="footer">
-                    <p>SoundShop © 2024 - TQS Project</p>
-                </footer>
-            </div>
+                {/* Routes WITH navbar */}
+                <Route element={<Layout />}>
+                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/instruments" element={<InstrumentList />} />
+                <Route path="/my-bookings" element={<MyBookings />} />
+                <Route path="/booking-history" element={<BookingHistory />} />
+                <Route path="/pending-requests" element={<PendingRequests />} />
+                </Route>
+            </Routes>
         </BrowserRouter>
     );
 }

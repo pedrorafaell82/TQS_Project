@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(BookingController.class)
 @Import(SecurityConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 class BookingControllerTest {
 
     @Autowired
@@ -43,7 +45,7 @@ class BookingControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Test
-    @WithMockUser(roles = "RENTER", username = "renter@example.com")
+    @WithMockUser(roles = "RENTER", username = "renter1")
     void createBooking_asRenter_returnsCreated() throws Exception {
         LocalDate start = LocalDate.of(2030, 1, 1);
         LocalDate end = LocalDate.of(2030, 1, 3);
@@ -54,7 +56,7 @@ class BookingControllerTest {
                 1L, 10L, 5L, start, end, "PENDING_PAYMENT", new BigDecimal("30.00")
         );
 
-        when(bookingService.createBooking(eq(10L), eq("renter@example.com"), any(CreateBookingRequest.class)))
+        when(bookingService.createBooking(eq(10L), eq("renter1"), any(CreateBookingRequest.class)))
                 .thenReturn(dto);
 
         mockMvc.perform(post("/api/instruments/{instrumentId}/bookings", 10L)
@@ -64,7 +66,7 @@ class BookingControllerTest {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.instrumentId").value(10L));
 
-        verify(bookingService).createBooking(eq(10L), eq("renter@example.com"), any(CreateBookingRequest.class));
+        verify(bookingService).createBooking(eq(10L), eq("renter1"), any(CreateBookingRequest.class));
     }
 
     @Test
