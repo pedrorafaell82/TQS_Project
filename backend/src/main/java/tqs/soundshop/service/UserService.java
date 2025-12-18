@@ -1,8 +1,10 @@
 package tqs.soundshop.service;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tqs.soundshop.dto.RegisterUserRequest;
 import tqs.soundshop.dto.UserDto;
@@ -13,18 +15,21 @@ import tqs.soundshop.exception.NotFoundException;
 
 import java.time.Instant;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;  
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
+    /* ================= REGISTER ================= */
 
     public UserDto register(RegisterUserRequest request) {
         if (userRepository.existsByEmail(request.email())) {
@@ -33,9 +38,7 @@ public class UserService {
 
         User user = new User();
         user.setEmail(request.email().toLowerCase());
-
         user.setPasswordHash(passwordEncoder.encode(request.password()));
-
         user.setName(request.name());
         user.setCreatedAt(Instant.now());
 
@@ -45,30 +48,51 @@ public class UserService {
         }
         user.setRoles(roles);
 
-        User saved = userRepository.save(user);
-        return toDto(saved);
+        return toDto(userRepository.save(user));
     }
 
+    /* ================= LOGIN SUPPORT ================= */
+
+    @Override
+    public UserDetails loadUserByUsername(String email)
+            throws UsernameNotFoundException {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found"));
+
+        return org.springframework.security.core.userdetails.User
+                .withUsername(user.getEmail())
+                .password(user.getPasswordHash())
+                .authorities(
+                        user.getRoles().stream()
+                                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+                                .collect(Collectors.toSet())
+                )
+                .build();
+    }
+
+    /* ================= QUERIES ================= */
+
+    public java.util.List<UserDto> getAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+    
     public UserDto getById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User " + id + " not found"));
-        return toDto(user);
+        return toDto(
+                userRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("User " + id + " not found"))
+        );
     }
 
     public UserDto getByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User with email " + email + " not found"));
-        return toDto(user);
-    }
-    
-    public UserDetails loadUserByName(String username) {
-        User user = userRepository.findByName(username);
-
-        return org.springframework.security.core.userdetails.User
-        .withUsername(user.getName())
-        .password(user.getPasswordHash())
-        .authorities(user.getRole())
-        .build();
+        return toDto(
+                userRepository.findByEmail(email)
+                        .orElseThrow(() -> new NotFoundException("User with email " + email + " not found"))
+        );
     }
 
     private UserDto toDto(User user) {

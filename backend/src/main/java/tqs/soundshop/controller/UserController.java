@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import tqs.soundshop.dto.RegisterUserRequest;
 import tqs.soundshop.dto.UserDto;
-import tqs.soundshop.dto.MeResponse;
 import tqs.soundshop.service.UserService;
 
 @RestController
@@ -20,6 +19,11 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping
+    public List<UserDto> getAll() {
+        return userService.getAll();
     }
 
     @PostMapping("/register")
@@ -35,7 +39,6 @@ public class UserController {
 
     @GetMapping("/me")
     public UserDto me(Authentication authentication) {
-        String email = authentication.getName(); 
-        return userService.getByEmail(email);
-    }
+        return userService.getByEmail(authentication.getName());
+        }
 }
