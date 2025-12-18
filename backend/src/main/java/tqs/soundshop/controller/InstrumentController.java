@@ -4,7 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import tqs.soundshop.dto.CreateInstrumentRequest;
 import tqs.soundshop.dto.InstrumentDto;
@@ -46,9 +47,9 @@ public class InstrumentController {
     // owner-facing: create new instrument for current user
     @PostMapping
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<InstrumentDto> create(Authentication authentication,
+    public ResponseEntity<InstrumentDto> create(@AuthenticationPrincipal UserDetails user,
                                                 @Valid @RequestBody CreateInstrumentRequest request) {
-        String ownerEmail = authentication.getName();
+        String ownerEmail = user.getUsername();
         InstrumentDto created = instrumentService.create(ownerEmail, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -64,8 +65,8 @@ public class InstrumentController {
     // owner-facing: list all instruments for the current owner
     @GetMapping("/owner/me")
     @PreAuthorize("hasRole('OWNER')")
-    public List<InstrumentDto> listMyInstruments(Authentication authentication) {
-        String ownerEmail = authentication.getName();
+    public List<InstrumentDto> listMyInstruments(@AuthenticationPrincipal UserDetails user) {
+        String ownerEmail = user.getUsername();
         return instrumentService.listByOwnerEmail(ownerEmail);
     }
 

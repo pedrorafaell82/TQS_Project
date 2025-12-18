@@ -4,7 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import tqs.soundshop.dto.BookingDto;
 import tqs.soundshop.dto.CreateBookingRequest;
@@ -31,10 +32,10 @@ public class BookingController {
     @PreAuthorize("hasRole('RENTER')")
     public ResponseEntity<BookingDto> createBooking(
             @PathVariable Long instrumentId,
-            Authentication authentication,
+            @AuthenticationPrincipal UserDetails user,
             @Valid @RequestBody CreateBookingRequest request
     ) {
-        String renterEmail = authentication.getName();
+        String renterEmail = user.getUsername();
         BookingDto created = bookingService.createBooking(instrumentId, renterEmail, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -47,16 +48,16 @@ public class BookingController {
     // renter dashboard: bookings for current user
     @GetMapping("/users/me/bookings")
     @PreAuthorize("hasRole('RENTER')")
-    public List<BookingDto> listForCurrentRenter(Authentication authentication) {
-        String renterEmail = authentication.getName();
+    public List<BookingDto> listForCurrentRenter(@AuthenticationPrincipal UserDetails user) {
+        String renterEmail = user.getUsername();
         return bookingService.listBookingsForRenterEmail(renterEmail);
     }
 
     // owner dashboard: bookings for all instruments owned by current owner
     @GetMapping("/owners/me/bookings")
     @PreAuthorize("hasRole('OWNER')")
-    public List<BookingDto> listForCurrentOwner(Authentication authentication) {
-        String ownerEmail = authentication.getName();
+    public List<BookingDto> listForCurrentOwner(@AuthenticationPrincipal UserDetails user) {
+        String ownerEmail = user.getUsername();
         return bookingService.listBookingsForOwnerEmail(ownerEmail);
     }
 
@@ -72,10 +73,10 @@ public class BookingController {
     @PreAuthorize("hasRole('OWNER') or hasRole('ADMIN')")
     public BookingDto updateStatus(
             @PathVariable Long id,
-            Authentication authentication,
+            @AuthenticationPrincipal UserDetails user,
             @Valid @RequestBody UpdateBookingStatusRequest request
     ) {
-        String ownerEmail = authentication.getName();
+        String ownerEmail = user.getUsername();
         Booking.Status status = request.status();
         return bookingService.updateStatusAsOwner(id, ownerEmail, status);
     }
@@ -83,16 +84,16 @@ public class BookingController {
     // renter: cancel own booking
     @PatchMapping("/bookings/{id}/cancel")
     @PreAuthorize("hasRole('RENTER')")
-    public BookingDto cancelBooking(@PathVariable Long id, Authentication authentication) {
-        String renterEmail = authentication.getName();
+    public BookingDto cancelBooking(@PathVariable Long id, @AuthenticationPrincipal UserDetails user) {
+        String renterEmail = user.getUsername();
         return bookingService.cancelAsRenter(id, renterEmail);
     }
 
     // renter: simulate payment
     @PostMapping("/bookings/{id}/pay")
     @PreAuthorize("hasRole('RENTER')")
-    public BookingDto payForBooking(@PathVariable Long id, Authentication authentication) {
-        String renterEmail = authentication.getName();
+    public BookingDto payForBooking(@PathVariable Long id, @AuthenticationPrincipal UserDetails user) {
+        String renterEmail = user.getUsername();
         return bookingService.pay(id, renterEmail);
     }
 

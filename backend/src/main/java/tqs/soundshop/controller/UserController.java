@@ -5,7 +5,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import tqs.soundshop.dto.RegisterUserRequest;
 import tqs.soundshop.dto.UserDto;
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public UserDto me(Authentication authentication) {
-        return userService.getByEmail(authentication.getName());
-        }
+    public UserDto me(@AuthenticationPrincipal UserDetails user) {
+        return userService.getByEmail(user.getUsername());
+    }
 }
