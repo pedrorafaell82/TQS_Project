@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:soundshop
+      SPRING_DATASOURCE_DRIVERCLASSNAME: org.h2.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_H2_CONSOLE_ENABLED: "true"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # browser runs on your HOST, so it must call localhost
+        VITE_API_URL: http://localhost:8080/api
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend

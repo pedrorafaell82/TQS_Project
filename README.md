@@ -1,6 +1,14 @@
 # Sound Shop
 TQS Project
 
+## Deployment
+
+To deploy (or redeploy) the project, run:
+
+```bash
+docker compose down -v
+docker compose up -d --build
+
 ## dados de teste 
 # Criar user owner (ID 1)
 curl -X POST http://localhost:8080/api/users/register \
